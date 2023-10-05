@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import db from './firebase-config';
 import firebase from 'firebase/compat/app';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 import { Button, Container, Grid, Typography } from '@mui/material'; // Import Material-UI components
 
@@ -15,7 +16,10 @@ import Modal from './Modal'; // Import the Modal component
 
 const STORAGE_PATH = 'uploads/';
 const PREVIEW_PATH = 'previews/';
-const USERS_COLLECTION = 'users';
+const FILES_COLLECTION = 'files';
+
+const functions = getFunctions();
+const checkCode = httpsCallable(functions, 'checkCode');
 
 const App = () => {
   const [isUsers, setUsers] = useState([]);
@@ -30,9 +34,10 @@ const App = () => {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalItem, setModalItem] = useState(null);
+  const [isAppChecked, setIsAppChecked] = useState(null);
 
   useEffect(() => {
-    db.collection(USERS_COLLECTION).orderBy('datetime', 'desc').onSnapshot(snapshot => {
+    db.collection(FILES_COLLECTION).orderBy('datetime', 'desc').onSnapshot(snapshot => {
       setUsers(snapshot.docs.map(doc => {
         return {
           id: doc.id,
@@ -44,6 +49,17 @@ const App = () => {
         };
       }));
     });
+
+    if(isAppChecked === null) {
+      checkCode({ codeParam: queryParams.get('code') })
+      .then((result) => {
+        setIsAppChecked(result.data);
+      })
+      .catch((error) => {
+        console.log("Error: " + error);
+        setIsAppChecked(false);
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -172,7 +188,7 @@ const App = () => {
       },
       async () => {
         const previewDownloadURL = await getDownloadURL(previewUploadTask.snapshot.ref);
-        db.collection(USERS_COLLECTION).add({
+        db.collection(FILES_COLLECTION).add({
           title: file.name,
           images: downloadURL,
           preview: previewDownloadURL,
@@ -228,7 +244,6 @@ const App = () => {
   }
 
   const queryParams = new URLSearchParams(window.location.search);
-  const codeParam = queryParams.get('code');
 
   return (
     <div className="App" style={{backgroundColor: "#93a69c", height: "100vh", overflowY: "auto"}}>
@@ -260,7 +275,7 @@ const App = () => {
         <Typography variant="body1" gutterBottom style={{ fontSize: '19px', fontFamily: 'Arial, sans-serif' }}>
           Divirtam-se e caso decidam compartilhar algo nas redes sociais, não deixem de usar a hashtag <strong>#CasamentoJuliaEVitor</strong>
         </Typography>
-         {codeParam === 'casamentojuliaevitor0909' ? (
+         {isAppChecked ? (
             <>
             <div className="wrapper" style={{ margin: "60px 0px"}}>
               {/* Hide the original file input */}
