@@ -8,11 +8,11 @@ import { Button, Container, Grid, Typography } from '@mui/material'; // Import M
 
 import './App.css';
 
-import ErrorPage from './ErrorPage'; // Import the ErrorPage component
-import Watermark from './Watermark'; // Import the Watermark component
-import CircularProgressWithLabel from './CircularProgressWithLabel';
-import FileLoadingIndicator from './FileLoadingIndicator'; // Import the FileLoadingIndicator component
-import Modal from './Modal'; // Import the Modal component
+import ErrorPage from './components/ErrorPage'; // Import the ErrorPage component
+import Watermark from './components/Watermark'; // Import the Watermark component
+import CircularProgressWithLabel from './components/CircularProgressWithLabel';
+import FileLoadingIndicator from './components/FileLoadingIndicator'; // Import the FileLoadingIndicator component
+import Modal from './components/Modal'; // Import the Modal component
 
 const STORAGE_PATH = 'uploads/';
 const PREVIEW_PATH = 'previews/';
