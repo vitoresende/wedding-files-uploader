@@ -1,5 +1,7 @@
 {
-  "name": "casamento",
+  "name": "wedding-files-uploader",
+  "author": "Vítor Resende (@vitoresende)",
+  "description": "Simplify guest photo uploads at your wedding with this intuitive application.",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
