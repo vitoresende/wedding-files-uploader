@@ -4,7 +4,8 @@ import firebase from 'firebase/compat/app';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
-import { Button, Container, Grid, Typography, CircularProgress } from '@mui/material'; // Import Material-UI components
+import { Button, Container, Grid, Typography, CircularProgress, Snackbar} from '@mui/material'; // Import Material-UI components
+import MuiAlert from '@mui/material/Alert';
 
 import './App.css';
 
@@ -25,6 +26,8 @@ const App = () => {
   const [isUsers, setUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isLoadingApp, setLoadingApp] = useState(true);
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0); // New state for upload progress
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [totalFiles, setTotalFiles] = useState(1);
@@ -58,7 +61,7 @@ const App = () => {
         setLoadingApp(false);
       })
       .catch((error) => {
-        console.log("Error: " + error);
+        console.log("Error when checking code: " + error);
         setIsAppChecked(false);
         setLoadingApp(false);
       });
@@ -68,7 +71,6 @@ const App = () => {
   useEffect(() => {
     if(sumControl){
       const sum = finalProgress.reduce(function(a, b) { return a + b; }, 0);
-      console.log("SUMMM " + sum)
       setUploadProgress(sum/totalFiles);
     }
   }, [sumControl, finalProgress, totalFiles]);
@@ -81,10 +83,8 @@ const App = () => {
 
   useEffect(() => {
     if(progressControl){
-      console.log(progressControl)
       setFinalProgress(progress => {
         progress[progressControl.index] = progressControl.value
-        console.log("progress " + progress)
         return progress
       })
       setSumControl(new Date().getUTCMilliseconds());
@@ -102,6 +102,13 @@ const App = () => {
     setSumControl(0);
   }
 
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
   const openModal = (item) => {
     setModalItem(item);
     setModalOpen(true);
@@ -112,7 +119,6 @@ const App = () => {
     setModalItem(null);
   };
   
-
   const generateFilePreview = async (file, storage, downloadURL) => {
     // Generate and save small previews for images and videos
     if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
@@ -224,7 +230,11 @@ const App = () => {
           },
           (error) => {
             console.log(`Error uploading ${file.name}:`, error);
-            reject(error);
+            setProgressControl({index, "value": 100});
+            setFileControl(new Date().getUTCMilliseconds());
+            setErrorMessage(error.message);
+            setSnackbarOpen(true);
+            resolve();
           },
           async () => {
             try {
@@ -250,6 +260,11 @@ const App = () => {
 
   return (
     <div className="App" style={{backgroundColor: "#93a69c", height: "100vh", overflowY: "auto"}}>
+      <Snackbar open={isSnackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackBar} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} sx={{ maxWidth: '90%' }}>
+        <MuiAlert elevation={6} onClose={handleCloseSnackBar}
+        severity="error" // You can change this to 'error', 'warning', 'info', etc.
+        >{errorMessage}</MuiAlert>
+      </Snackbar>
       <Modal item={modalItem} isOpen={isModalOpen} onClose={closeModal} />
       {isLoading && (<div id="loading-overlay" className="loading-overlay">
           <div className="loading-spinner padding-content">
