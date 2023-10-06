@@ -3,7 +3,7 @@ import React from 'react';
 const ErrorPage = () => {
   return (
     <div>
-      <h1>Erro: O conteúdo está disponível exclusivamente para convidados.</h1>
+      <h1>Error: The content is available exclusively for invited guests.</h1>
     </div>
   );
 };

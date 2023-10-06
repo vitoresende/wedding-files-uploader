@@ -261,20 +261,13 @@ const App = () => {
         </div>)}
       <Container maxWidth="md" style={{backgroundColor: "#b6c3b3", height: "100vh", display: "inline-table", paddingBottom: "25px"}}>
         <img
-          src="/assets/img_juvit.jpg"
-          alt="Júlia e Vítor imagem"
+          src="/assets/wedding_main-image.jpg"
+          alt="wedding image"
           style={{ width: '100%', marginBottom: '16px' }}
         />
-        <Typography variant="h4" gutterBottom>
-          Júlia e Vítor
-        </Typography>
-        <Typography variant="body1" gutterBottom style={{ fontSize: '19px', fontFamily: 'Arial, sans-serif' }}>
-         Esperamos que estejam curtindo este momento especial. Aqui você pode compartilhar as fotos e vídeos do casamento. Adoraríamos ver o casamento através dos olhos de vocês.
-        </Typography>
+        <Typography variant="h4" gutterBottom>Your title here</Typography>
+        <Typography variant="body1" gutterBottom style={{ fontSize: '19px', fontFamily: 'Arial, sans-serif' }}>Add here your special message to your guests.</Typography>
         <br/>
-        <Typography variant="body1" gutterBottom style={{ fontSize: '19px', fontFamily: 'Arial, sans-serif' }}>
-          Divirtam-se e caso decidam compartilhar algo nas redes sociais, não deixem de usar a hashtag <strong>#CasamentoJuliaEVitor</strong>
-        </Typography>
          {isAppChecked ? (
             <>
             <div className="wrapper" style={{ margin: "60px 0px"}}>
@@ -292,7 +285,7 @@ const App = () => {
                   component="label" // This makes the Button behave like a label
                   sx={{ backgroundColor: '#16511a', color: '#fff' }} // Custom styling
                >
-                  Carregar foto e/ou vídeo
+                  Upload photo and/or video
                   <input type="file" accept="image/*, video/*" onChange={addList} multiple style={{ display: 'none' }} />
                </Button>
             </div>
