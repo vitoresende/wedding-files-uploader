@@ -4,7 +4,7 @@ import firebase from 'firebase/compat/app';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
-import { Button, Container, Grid, Typography } from '@mui/material'; // Import Material-UI components
+import { Button, Container, Grid, Typography, CircularProgress } from '@mui/material'; // Import Material-UI components
 
 import './App.css';
 
@@ -24,6 +24,7 @@ const checkCode = httpsCallable(functions, 'checkCode');
 const App = () => {
   const [isUsers, setUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingApp, setLoadingApp] = useState(true);
   const [uploadProgress, setUploadProgress] = useState(0); // New state for upload progress
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [totalFiles, setTotalFiles] = useState(1);
@@ -54,10 +55,12 @@ const App = () => {
       checkCode({ codeParam: queryParams.get('code') })
       .then((result) => {
         setIsAppChecked(result.data);
+        setLoadingApp(false);
       })
       .catch((error) => {
         console.log("Error: " + error);
         setIsAppChecked(false);
+        setLoadingApp(false);
       });
     }
   }, []);
@@ -267,8 +270,8 @@ const App = () => {
         />
         <Typography variant="h4" gutterBottom>Your title here</Typography>
         <Typography variant="body1" gutterBottom style={{ fontSize: '19px', fontFamily: 'Arial, sans-serif' }}>Add here your special message to your guests.</Typography>
-        <br/>
-         {isAppChecked ? (
+        { isLoadingApp ? (<CircularProgress style={{ color: 'green' }} />) : isAppChecked ? 
+          (
             <>
             <div className="wrapper" style={{ margin: "60px 0px"}}>
               {/* Hide the original file input */}
@@ -306,9 +309,10 @@ const App = () => {
                ))}
             </Grid>
             </>
-         ) : (
+          ) : (
             <ErrorPage />
-         )}
+          )
+        }
       </Container>
    </div>
   );
