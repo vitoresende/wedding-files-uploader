@@ -6,6 +6,26 @@ This project was developed to streamline the process of collecting photos from g
 
 The project is hosted [here](https://wedding-files-uploader.web.app/?code=testcode) for testing purposes. Please note that due to cost considerations, file uploads are disabled in this preview mode.
 
+## Configuration
+
+### Environment Variables
+
+Before running the project, make sure to set up the necessary environment variables:
+
+1. Inside the `/functions` directory, edit the existing `.env` file to configure the code used for checking if the person has entered the correct code to prevent unauthorized photo submissions.
+
+```env
+ATTR_CODE=your_secret_code_here
+```
+
+2. In the project root directory, edit the existing `.env` file to configure Firebase.
+
+```env
+REACT_APP_FIREBASE_CONFIG={"apiKey": "your_firebase_api_key","authDomain": "your_firebase_auth_domain","projectId": "your_firebase_project_id","storageBucket": "your_firebase_storage_bucket","messagingSenderId": "your_firebase_messaging_sender_id","appId": "your_firebase_app_id","measurementId": "your_firebase_measurement_id"}
+```
+
+Remember to replace `your_secret_code_here` and the Firebase variables with your actual values.
+
 ## Setup
 
 To configure the project, follow these steps:
