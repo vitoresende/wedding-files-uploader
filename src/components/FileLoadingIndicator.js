@@ -9,7 +9,7 @@ const FileLoadingIndicator = ({ fileUploaded, totalFiles }) => {
         <UploadFile fontSize="small" /> 
       </div>
       <div>
-        <div style={{zoom: 0.6}}>Carregando arquivos...</div>
+        <div style={{zoom: 0.6}}>Uploading files...</div>
         <div>{`${fileUploaded} / ${totalFiles}`}</div>
       </div>
     </div>
